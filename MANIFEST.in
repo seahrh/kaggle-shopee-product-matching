@@ -1,0 +1,5 @@
+exclude *.ipynb
+include *.ini
+recursive-include models model.h5
+recursive-include models model.txt
+graft features
