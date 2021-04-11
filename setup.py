@@ -10,6 +10,7 @@ setup(
         "gcsfs==0.7.2",
         "google-cloud-logging==1.15.1",
         "google-cloud-storage==1.30.0",
+        "langid==1.1.6",
         "lightgbm==3.1.1",
         "optuna==2.6.0",
         "pandas==1.2.2",
