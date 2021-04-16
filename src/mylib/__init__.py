@@ -9,7 +9,7 @@ __all__ = [
 import numpy as np
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
-from typing import Set, List, Callable, Any
+from typing import Set, List, Callable, Any, Iterable
 
 
 def target_label(df: pd.DataFrame) -> pd.Series:
@@ -25,18 +25,26 @@ def metric_per_row(prediction: str, target: str = "target") -> Callable[[Any], f
     return f1
 
 
-def combine_as_list(row) -> List[str]:
-    s: Set[str] = set()
-    s.add(row["posting_id"])
-    s |= set(row["phash_matches"])
-    return list(s)
+def combine_as_list(cols: Iterable[str]) -> Callable:
+    def fn(row) -> List[str]:
+        s: Set[str] = set()
+        s.add(row["posting_id"])
+        for col in cols:
+            s |= set(row[col])
+        return list(s)
+
+    return fn
 
 
-def combine_as_string(row) -> str:
-    s: Set[str] = set()
-    s.add(row["posting_id"])
-    s |= set(row["phash_matches"])
-    return " ".join(s)
+def combine_as_string(cols: Iterable[str]) -> Callable:
+    def fn(row) -> str:
+        s: Set[str] = set()
+        s.add(row["posting_id"])
+        for col in cols:
+            s |= set(row[col])
+        return " ".join(s)
+
+    return fn
 
 
 def phash_matches(
