@@ -4,11 +4,13 @@ __all__ = [
     "combine_as_list",
     "combine_as_string",
     "phash_matches",
+    "sbert_matches",
 ]
 
 import numpy as np
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
+from sentence_transformers import SentenceTransformer
 from typing import Set, List, Callable, Any, Iterable
 
 
@@ -61,13 +63,41 @@ def phash_matches(
         rows.append(row)
     x = pd.DataFrame.from_records(rows)
     x = x.astype(np.int8)
-    model = NearestNeighbors(n_neighbors=min(n_neighbors, len(x) - 1), metric="hamming")
-    model.fit(x)
-    distances, indices = model.kneighbors()
+    nn = NearestNeighbors(n_neighbors=min(n_neighbors, len(x) - 1), metric="hamming")
+    nn.fit(x)
+    distances, indices = nn.kneighbors()
     res: List[List[str]] = [[] for _ in range(len(indices))]
     for i in range(len(indices)):
         for j in range(len(indices[0])):
             if distances[i][j] > threshold:
                 break
             res[i].append(df.iloc[indices[i][j]]["posting_id"])
+    return res
+
+
+def sbert_matches(
+    model_path: str,
+    sentences: List[str],
+    posting_ids: List[str],
+    threshold: float,
+    n_neighbors: int = 49,
+) -> List[List[str]]:
+    model = SentenceTransformer(model_path)
+    em = model.encode(
+        sentences,
+        show_progress_bar=False,
+        convert_to_numpy=True,
+        normalize_embeddings=True,
+    )
+    nn = NearestNeighbors(
+        n_neighbors=min(n_neighbors, len(posting_ids) - 1), metric="euclidean"
+    )
+    nn.fit(em)
+    distances, indices = nn.kneighbors()
+    res: List[List[str]] = [[] for _ in range(len(indices))]
+    for i in range(len(indices)):
+        for j in range(len(indices[0])):
+            if distances[i][j] > threshold:
+                break
+            res[i].append(posting_ids[indices[i][j]])
     return res

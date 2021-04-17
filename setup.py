@@ -16,6 +16,7 @@ setup(
         "pandas==1.2.2",
         "pyarrow==3.0.0",
         "scikit-learn==0.24.1",
+        "sentence-transformers==1.0.4",
         "tensorflow==2.4.1",
     ],
     extras_require={
