@@ -5,13 +5,16 @@ __all__ = [
     "combine_as_string",
     "phash_matches",
     "sbert_matches",
+    "preprocess",
 ]
 
+import re
 import numpy as np
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 from sentence_transformers import SentenceTransformer
 from typing import Set, List, Callable, Any, Iterable
+from scml.nlp import to_ascii_str, expand_contractions
 
 
 def target_label(df: pd.DataFrame) -> pd.Series:
@@ -102,4 +105,22 @@ def sbert_matches(
             if distances[i][j] > threshold:
                 break
             res[i].append(posting_ids[indices[i][j]])
+    return res
+
+
+_remove_byte_string_syntax_pattern = re.compile(r'^b"(.*)"$')
+
+
+def _remove_byte_string_syntax(s: str) -> str:
+    m = _remove_byte_string_syntax_pattern.match(s)
+    if m is None:
+        return s
+    return m.group(1)
+
+
+def preprocess(row) -> str:
+    res = row["title"]
+    res = _remove_byte_string_syntax(res)
+    res = to_ascii_str(res)
+    res = expand_contractions(res)
     return res
