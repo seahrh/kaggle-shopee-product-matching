@@ -81,8 +81,10 @@ def sbert_matches(
     posting_ids: List[str],
     threshold: float,
     n_neighbors: int = 49,
+    max_seq_length: int = 512,
 ) -> List[List[str]]:
     model = SentenceTransformer(model_path)
+    model.max_seq_length = max_seq_length
     em = model.encode(
         sentences,
         show_progress_bar=False,
