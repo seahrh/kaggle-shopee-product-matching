@@ -119,7 +119,7 @@ def _remove_byte_string_syntax(s: str) -> str:
 
 
 def preprocess(row) -> str:
-    res = row["title"]
+    res: str = row["title"]
     res = _remove_byte_string_syntax(res)
     res = to_ascii_str(res)
     res = expand_contractions(res)
