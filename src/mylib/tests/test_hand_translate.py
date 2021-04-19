@@ -23,3 +23,6 @@ class TestHandTranslate:
             == hand_translate("sarong")
             == "wrap knot cover lower body"
         )
+
+    def test_baso(self):
+        assert hand_translate("baso") == hand_translate("bakso") == "meatball"
