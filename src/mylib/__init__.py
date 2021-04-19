@@ -8,6 +8,10 @@ __all__ = [
     "preprocess",
 ]
 
+from .translation import *
+
+__all__ += translation.__all__  # type: ignore  # module name is not defined
+
 import re
 import numpy as np
 import pandas as pd
@@ -122,5 +126,6 @@ def preprocess(row) -> str:
     res: str = row["title"]
     res = _remove_byte_string_syntax(res)
     res = to_ascii_str(res)
+    res = hand_translate(res)
     res = expand_contractions(res)
     return res
