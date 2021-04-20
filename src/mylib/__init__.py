@@ -112,19 +112,25 @@ def sbert_matches(
     return res
 
 
-_remove_byte_string_syntax_pattern = re.compile(r'^b"(.*)"$')
+_byte_string_literal_pattern = re.compile(r'^b"(.*)"$')
+_escaped_bytes_pattern = re.compile(r"\\x[\dabcde]{2}")
 
 
-def _remove_byte_string_syntax(s: str) -> str:
-    m = _remove_byte_string_syntax_pattern.match(s)
+def _remove_byte_string_literal(s: str) -> str:
+    m = _byte_string_literal_pattern.match(s)
     if m is None:
         return s
     return m.group(1)
 
 
+def _remove_escaped_bytes(s: str) -> str:
+    return _escaped_bytes_pattern.sub("", s)
+
+
 def preprocess(row) -> str:
     res: str = row["title"]
-    res = _remove_byte_string_syntax(res)
+    res = _remove_byte_string_literal(res)
+    res = _remove_escaped_bytes(res)
     res = to_ascii_str(res)
     res = hand_translate(res)
     res = expand_contractions(res)
