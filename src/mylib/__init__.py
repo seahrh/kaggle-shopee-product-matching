@@ -18,7 +18,7 @@ import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 from sentence_transformers import SentenceTransformer
 from typing import Set, List, Callable, Any, Iterable
-from scml.nlp import to_ascii_str, expand_contractions
+from scml.nlp import to_ascii_str, expand_contractions, decode_escaped_bytes
 
 
 def target_label(df: pd.DataFrame) -> pd.Series:
@@ -130,7 +130,7 @@ def _remove_escaped_bytes(s: str) -> str:
 def preprocess(row) -> str:
     res: str = row["title"]
     res = _remove_byte_string_literal(res)
-    res = _remove_escaped_bytes(res)
+    res = decode_escaped_bytes(res)
     res = to_ascii_str(res)
     res = hand_translate(res)
     res = expand_contractions(res)
