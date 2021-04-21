@@ -113,7 +113,7 @@ def sbert_matches(
 
 
 _byte_string_literal_pattern = re.compile(r'^b"(.*)"$')
-_escaped_bytes_pattern = re.compile(r"\\x[\dabcde]{2}")
+_escaped_bytes_pattern = re.compile(r"\\x[\dabcdef]{2}")
 
 
 def _remove_byte_string_literal(s: str) -> str:
