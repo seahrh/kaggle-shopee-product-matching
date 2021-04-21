@@ -17,6 +17,7 @@ setup(
         "pyarrow==3.0.0",
         "scikit-learn==0.24.1",
         "sentence-transformers==1.0.4",
+        "symspellpy==6.7.0",
         "tensorflow==2.4.1",
     ],
     extras_require={
