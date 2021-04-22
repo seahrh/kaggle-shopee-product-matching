@@ -9,10 +9,10 @@ class TestRemoveStopwords:
 
     def test_case_1(self):
         assert remove_stopwords("you and me") == "  "
-        assert remove_stopwords("official product") == " product"
-        assert remove_stopwords("guarantee") == ""
-        assert remove_stopwords("guaranteed") == ""
-        assert remove_stopwords("big sale") == ""
-        assert remove_stopwords("bigsale") == ""
-        assert remove_stopwords("fashion") == ""
-        assert remove_stopwords("fashionable") == ""
+        assert remove_stopwords("official product") == " "
+        assert remove_stopwords("guarantee guaranteed") == " "
+        assert remove_stopwords("big sale bigsale") == " "
+        assert remove_stopwords("fashion fashionable") == " "
+        assert remove_stopwords("offer") == ""
+        assert remove_stopwords("promo promotion") == " "
+        assert remove_stopwords("to too") == " "
