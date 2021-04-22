@@ -9,8 +9,10 @@ __all__ = [
 ]
 
 from .translation import *
+from .stopwords import *
 
 __all__ += translation.__all__  # type: ignore  # module name is not defined
+__all__ += stopwords.__all__  # type: ignore  # module name is not defined
 
 import re
 import numpy as np
@@ -134,4 +136,5 @@ def preprocess(row) -> str:
     res = to_ascii_str(res)
     res = hand_translate(res)
     res = expand_contractions(res)
+    res = remove_stopwords(res)
     return res
