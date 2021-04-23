@@ -15,6 +15,7 @@ setup(
         "optuna==2.6.0",
         "pandas==1.2.2",
         "pyarrow==3.0.0",
+        "pytesseract==0.3.7",
         "scikit-learn==0.24.1",
         "sentence-transformers==1.0.4",
         "symspellpy==6.7.0",
