@@ -129,12 +129,15 @@ def _remove_escaped_bytes(s: str) -> str:
     return _escaped_bytes_pattern.sub("", s)
 
 
-def preprocess(row) -> str:
-    res: str = row["title"]
-    res = _remove_byte_string_literal(res)
-    res = decode_escaped_bytes(res)
-    res = to_ascii_str(res)
-    res = hand_translate(res)
-    res = expand_contractions(res)
-    res = remove_stopwords(res)
-    return res
+def preprocess(column: str) -> Callable:
+    def fn(row) -> str:
+        res: str = row[column]
+        res = _remove_byte_string_literal(res)
+        res = decode_escaped_bytes(res)
+        res = to_ascii_str(res)
+        res = hand_translate(res)
+        res = expand_contractions(res)
+        res = remove_stopwords(res)
+        return res
+
+    return fn

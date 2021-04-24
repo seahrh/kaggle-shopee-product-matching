@@ -12,6 +12,7 @@ setup(
         "google-cloud-storage==1.30.0",
         "langid==1.1.6",
         "lightgbm==3.1.1",
+        "opencv-python-headless==4.5.1.48",
         "optuna==2.6.0",
         "pandas==1.2.2",
         "pyarrow==3.0.0",
