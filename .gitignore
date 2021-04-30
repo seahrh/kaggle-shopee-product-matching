@@ -1,5 +1,6 @@
 input/
 output/
+tmp/
 models/
 pretrained/
 .idea/
