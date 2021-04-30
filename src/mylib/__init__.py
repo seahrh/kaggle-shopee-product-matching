@@ -6,6 +6,7 @@ __all__ = [
     "phash_matches",
     "sbert_matches",
     "preprocess",
+    "efficient_net",
 ]
 
 from .translation import *
@@ -17,6 +18,7 @@ __all__ += stopwords.__all__  # type: ignore  # module name is not defined
 import re
 import numpy as np
 import pandas as pd
+from tensorflow import keras
 from sklearn.neighbors import NearestNeighbors
 from sentence_transformers import SentenceTransformer
 from typing import Set, List, Callable, Any, Iterable
@@ -141,3 +143,62 @@ def preprocess(column: str) -> Callable:
         return res
 
     return fn
+
+
+def efficient_net(variant: str, directory: str, pooling: str):
+    res = keras.applications.EfficientNetB0(
+        include_top=False,
+        input_shape=(224, 224, 3),
+        pooling=pooling,
+        weights=f"{directory}/efficientnetb0_notop.h5",
+    )
+    if variant == "efficientnetb1":
+        res = keras.applications.EfficientNetB1(
+            include_top=False,
+            input_shape=(240, 240, 3),
+            pooling=pooling,
+            weights=f"{directory}/efficientnetb1_notop.h5",
+        )
+    elif variant == "efficientnetb2":
+        res = keras.applications.EfficientNetB2(
+            include_top=False,
+            input_shape=(260, 260, 3),
+            pooling=pooling,
+            weights=f"{directory}/efficientnetb2_notop.h5",
+        )
+    elif variant == "efficientnetb3":
+        res = keras.applications.EfficientNetB3(
+            include_top=False,
+            input_shape=(300, 300, 3),
+            pooling=pooling,
+            weights=f"{directory}/efficientnetb3_notop.h5",
+        )
+    elif variant == "efficientnetb4":
+        res = keras.applications.EfficientNetB4(
+            include_top=False,
+            input_shape=(380, 380, 3),
+            pooling=pooling,
+            weights=f"{directory}/efficientnetb4_notop.h5",
+        )
+    elif variant == "efficientnetb5":
+        res = keras.applications.EfficientNetB5(
+            include_top=False,
+            input_shape=(456, 456, 3),
+            pooling=pooling,
+            weights=f"{directory}/efficientnetb5_notop.h5",
+        )
+    elif variant == "efficientnetb6":
+        res = keras.applications.EfficientNetB6(
+            include_top=False,
+            input_shape=(528, 528, 3),
+            pooling=pooling,
+            weights=f"{directory}/efficientnetb6_notop.h5",
+        )
+    elif variant == "efficientnetb7":
+        res = keras.applications.EfficientNetB7(
+            include_top=False,
+            input_shape=(600, 600, 3),
+            pooling=pooling,
+            weights=f"{directory}/efficientnetb7_notop.h5",
+        )
+    return res
