@@ -5,6 +5,7 @@ from tensorflow import keras
 __all__ = ["ArcMarginProduct"]
 
 
+@keras.utils.register_keras_serializable()
 class ArcMarginProduct(keras.layers.Layer):
     """
     Implements large margin arc distance.
