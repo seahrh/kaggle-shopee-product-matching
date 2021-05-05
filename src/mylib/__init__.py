@@ -18,6 +18,7 @@ __all__ += stopwords.__all__  # type: ignore  # module name is not defined
 __all__ += arcface.__all__  # type: ignore  # module name is not defined
 
 import re
+import configparser
 import numpy as np
 import pandas as pd
 from tensorflow import keras
@@ -25,6 +26,8 @@ from sklearn.neighbors import NearestNeighbors
 from sentence_transformers import SentenceTransformer
 from typing import Set, List, Callable, Any, Iterable
 from scml.nlp import to_ascii_str, expand_contractions, decode_escaped_bytes
+
+CONF = configparser.ConfigParser().read("app.ini")
 
 
 def target_label(df: pd.DataFrame) -> pd.Series:
