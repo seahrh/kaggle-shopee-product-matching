@@ -11,9 +11,11 @@ __all__ = [
 
 from .translation import *
 from .stopwords import *
+from .arcface import *
 
 __all__ += translation.__all__  # type: ignore  # module name is not defined
 __all__ += stopwords.__all__  # type: ignore  # module name is not defined
+__all__ += arcface.__all__  # type: ignore  # module name is not defined
 
 import re
 import numpy as np
