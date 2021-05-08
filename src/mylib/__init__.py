@@ -12,10 +12,12 @@ __all__ = [
 from .translation import *
 from .stopwords import *
 from .arcface import *
+from .brands import *
 
 __all__ += translation.__all__  # type: ignore  # module name is not defined
 __all__ += stopwords.__all__  # type: ignore  # module name is not defined
 __all__ += arcface.__all__  # type: ignore  # module name is not defined
+__all__ += brands.__all__  # type: ignore  # module name is not defined
 
 import re
 import configparser
@@ -24,7 +26,7 @@ import pandas as pd
 from tensorflow import keras
 from sklearn.neighbors import NearestNeighbors
 from sentence_transformers import SentenceTransformer
-from typing import Set, List, Callable, Any, Iterable
+from typing import Set, List, Callable, Any, Iterable, NamedTuple
 from scml.nlp import to_ascii_str, expand_contractions, decode_escaped_bytes
 
 
@@ -209,3 +211,7 @@ def efficient_net(variant: str, directory: str, pooling: str):
             weights=f"{directory}/efficientnetb7_notop.h5",
         )
     return res
+
+
+class Item(NamedTuple):
+    brands: Set[str]
