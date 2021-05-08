@@ -4351,8 +4351,9 @@ PATTERNS: Tuple[Pattern, ...] = tuple(
 
 def get_brands(s: str, rules: Tuple[Pattern, ...] = PATTERNS) -> Set[str]:
     res = set()
+    st = s.lower()
     for r in rules:
-        m = r.search(s)
+        m = r.search(st)
         if m:
             res.add(m.group(0))
     return res

@@ -28,7 +28,7 @@ import pandas as pd
 from tensorflow import keras
 from sklearn.neighbors import NearestNeighbors
 from sentence_transformers import SentenceTransformer
-from typing import Set, List, Callable, Any, Iterable, NamedTuple
+from typing import Set, List, Callable, Any, Iterable, NamedTuple, Dict
 from scml.nlp import to_ascii_str, expand_contractions, decode_escaped_bytes
 
 
@@ -45,23 +45,43 @@ def metric_per_row(prediction: str, target: str = "target") -> Callable[[Any], f
     return f1
 
 
-def combine_as_list(cols: Iterable[str]) -> Callable:
+class Item(NamedTuple):
+    brands: Set[str]
+
+
+def combine_as_list(
+    cols: Iterable[str], imap: Dict[str, Item], brand_threshold: float
+) -> Callable:
     def fn(row) -> List[str]:
         s: Set[str] = set()
-        s.add(row["posting_id"])
+        pid = row["posting_id"]
         for col in cols:
             s |= set(row[col])
+        bad: Set[str] = set()
+        for other in s:
+            if not ner_matches(imap[pid], imap[other], brand_threshold=brand_threshold):
+                bad.add(other)
+        s -= bad
+        s.add(pid)
         return list(s)
 
     return fn
 
 
-def combine_as_string(cols: Iterable[str]) -> Callable:
+def combine_as_string(
+    cols: Iterable[str], imap: Dict[str, Item], brand_threshold: float
+) -> Callable:
     def fn(row) -> str:
         s: Set[str] = set()
-        s.add(row["posting_id"])
+        pid = row["posting_id"]
         for col in cols:
             s |= set(row[col])
+        bad: Set[str] = set()
+        for other in s:
+            if not ner_matches(imap[pid], imap[other], brand_threshold=brand_threshold):
+                bad.add(other)
+        s -= bad
+        s.add(pid)
         return " ".join(s)
 
     return fn
@@ -209,10 +229,6 @@ def efficient_net(variant: str, directory: str, pooling: str):
             weights=f"{directory}/efficientnetb7_notop.h5",
         )
     return res
-
-
-class Item(NamedTuple):
-    brands: Set[str]
 
 
 def extract(s: str) -> Item:
