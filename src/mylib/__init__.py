@@ -7,12 +7,15 @@ __all__ = [
     "sbert_matches",
     "preprocess",
     "efficient_net",
+    "extract",
+    "Item",
+    "ner_matches",
 ]
 
-from .translation import *
-from .stopwords import *
 from .arcface import *
 from .brands import *
+from .stopwords import *
+from .translation import *
 
 __all__ += translation.__all__  # type: ignore  # module name is not defined
 __all__ += stopwords.__all__  # type: ignore  # module name is not defined
@@ -20,7 +23,6 @@ __all__ += arcface.__all__  # type: ignore  # module name is not defined
 __all__ += brands.__all__  # type: ignore  # module name is not defined
 
 import re
-import configparser
 import numpy as np
 import pandas as pd
 from tensorflow import keras
@@ -28,10 +30,6 @@ from sklearn.neighbors import NearestNeighbors
 from sentence_transformers import SentenceTransformer
 from typing import Set, List, Callable, Any, Iterable, NamedTuple
 from scml.nlp import to_ascii_str, expand_contractions, decode_escaped_bytes
-
-
-def deprecated_config():
-    return configparser.ConfigParser().read("app.ini")
 
 
 def target_label(df: pd.DataFrame) -> pd.Series:
@@ -215,3 +213,15 @@ def efficient_net(variant: str, directory: str, pooling: str):
 
 class Item(NamedTuple):
     brands: Set[str]
+
+
+def extract(s: str) -> Item:
+    return Item(brands=get_brands(s))
+
+
+def ner_matches(a: Item, b: Item, brand_threshold: float = 0.5) -> bool:
+    if len(a.brands) != 0 and len(b.brands) != 0:
+        jaccard = len(a.brands & b.brands) / len(a.brands | b.brands)
+        if jaccard < brand_threshold:
+            return False
+    return True
