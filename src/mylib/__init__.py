@@ -60,6 +60,7 @@ def combine_as_list(
         bad: Set[str] = set()
         for other in s:
             if not ner_matches(imap[pid], imap[other], brand_threshold=brand_threshold):
+                print(f"a={repr(imap[pid])}, b={repr(imap[other])}")
                 bad.add(other)
         s -= bad
         s.add(pid)
