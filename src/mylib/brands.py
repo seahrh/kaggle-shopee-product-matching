@@ -2673,6 +2673,7 @@ PATTERNS: Tuple[Pattern, ...] = tuple(
         re.compile(r"\bneon\b", FLAGS),
         re.compile(r"\bneotech\b", FLAGS),
         re.compile(r"\bnerf\b", FLAGS),
+        re.compile(r"\bnescafe\b", FLAGS),
         re.compile(r"\bnesting material\b", FLAGS),
         re.compile(r"\bnestle\b", FLAGS),
         re.compile(r"\bnetapp\b", FLAGS),
