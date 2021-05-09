@@ -93,3 +93,17 @@ class TestGetMeasurements:
         assert get_measurements("10 boxs") == e
         assert get_measurements("10 boxes") == e
         assert get_measurements("10box") == e
+
+    def test_packet(self):
+        e = {Measurement(quantity=10, uom="packet")}
+        assert get_measurements("10 packet") == e
+        assert get_measurements("10 packets") == e
+        assert get_measurements("10 pkt") == e
+        assert get_measurements("10 pkts") == e
+        assert get_measurements("10packet") == e
+
+    def test_bottle(self):
+        e = {Measurement(quantity=10, uom="bottle")}
+        assert get_measurements("10 bottle") == e
+        assert get_measurements("10 bottles") == e
+        assert get_measurements("10bottle") == e

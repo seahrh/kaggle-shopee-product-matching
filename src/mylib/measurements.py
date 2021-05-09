@@ -61,6 +61,14 @@ RULES: Tuple[Rule, ...] = tuple(
         Rule(
             pattern=re.compile(r"\b(\d+)\s*(boxs?|boxes)\b", FLAGS), uom="box", scale=1,
         ),
+        Rule(
+            pattern=re.compile(r"\b(\d+)\s*(pkts?|packets?)\b", FLAGS),
+            uom="packet",
+            scale=1,
+        ),
+        Rule(
+            pattern=re.compile(r"\b(\d+)\s*bottles?\b", FLAGS), uom="bottle", scale=1,
+        ),
     ]
 )
 
