@@ -1,11 +1,12 @@
 import re
-from typing import Any, NamedTuple, Tuple
+from re import Pattern
+from typing import NamedTuple, Tuple
 
 __all__ = ["hand_translate"]
 
 
 class Rule(NamedTuple):
-    pattern: Any
+    pattern: Pattern
     replacement: str
 
 
@@ -646,7 +647,7 @@ TRANSLATIONS: Tuple[Rule, ...] = tuple(
         Rule(pattern=re.compile(r"\bhabbatussauda\b", FLAGS), replacement="black seed"),
         Rule(pattern=re.compile(r"\btalenan\b", FLAGS), replacement="cutting board"),
         Rule(pattern=re.compile(r"\bdaya\b", FLAGS), replacement="energy"),
-        Rule(pattern=re.compile(r"\bkiloan\b", FLAGS), replacement="kilos"),
+        Rule(pattern=re.compile(r"\bkiloan\b", FLAGS), replacement="kilo"),
         Rule(pattern=re.compile(r"\bjadi\b", FLAGS), replacement="so"),
         Rule(pattern=re.compile(r"\bpagi\b", FLAGS), replacement="morning"),
         Rule(pattern=re.compile(r"\baktif\b", FLAGS), replacement="active"),
