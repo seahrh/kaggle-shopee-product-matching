@@ -14,60 +14,92 @@ class Rule(NamedTuple):
 
 
 class Measurement(NamedTuple):
-    quantity: int
+    quantity: float
     uom: str
 
 
 RULES: Tuple[Rule, ...] = tuple(
     [
         Rule(
-            pattern=re.compile(r"\b(\d+)\s*(g|gr|grams?)\b", FLAGS), uom="gram", scale=1
+            pattern=re.compile(r"\b(\d+(\.\d+)?)\s*(g|gr|grams?)\b", FLAGS),
+            uom="gram",
+            scale=1,
         ),
         Rule(
-            pattern=re.compile(r"\b(\d+)\s*(kg|kilos?|kilograms?)\b", FLAGS),
+            pattern=re.compile(r"\b(\d+(\.\d+)?)\s*(kg|kilos?|kilograms?)\b", FLAGS),
             uom="gram",
             scale=1000,
         ),
         Rule(
-            pattern=re.compile(r"\b(\d+)\s*(mm|millimetres?|millimeters?)\b", FLAGS),
+            pattern=re.compile(
+                r"\b(\d+(\.\d+)?)\s*(mm|millimetres?|millimeters?)\b", FLAGS
+            ),
             uom="millimetre",
             scale=1,
         ),
         Rule(
-            pattern=re.compile(r"\b(\d+)\s*(cm|centimetres?|centimeters?)\b", FLAGS),
+            pattern=re.compile(
+                r"\b(\d+(\.\d+)?)\s*(cm|centimetres?|centimeters?)\b", FLAGS
+            ),
             uom="millimetre",
             scale=10,
         ),
         Rule(
-            pattern=re.compile(r"\b(\d+)\s*(m|metres?|meters?)\b", FLAGS),
+            pattern=re.compile(r"\b(\d+(\.\d+)?)\s*(m|metres?|meters?)\b", FLAGS),
             uom="millimetre",
             scale=1000,
         ),
         Rule(
-            pattern=re.compile(r"\b(\d+)\s*(ml|millilitres?|milliliters?)\b", FLAGS),
+            pattern=re.compile(
+                r"\b(\d+(\.\d+)?)\s*(ml|millilitres?|milliliters?)\b", FLAGS
+            ),
             uom="millilitre",
             scale=1,
         ),
         Rule(
-            pattern=re.compile(r"\b(\d+)\s*(l|litres?|liters?)\b", FLAGS),
+            pattern=re.compile(r"\b(\d+(\.\d+)?)\s*(l|litres?|liters?)\b", FLAGS),
             uom="millilitre",
             scale=1000,
         ),
         Rule(
-            pattern=re.compile(r"\b(\d+)\s*(pcs?|pieces?)\b", FLAGS),
+            pattern=re.compile(r"\b(\d+(\.\d+)?)\s*mi?b\b", FLAGS),
+            uom="megabyte",
+            scale=1,
+        ),
+        Rule(
+            pattern=re.compile(r"\b(\d+(\.\d+)?)\s*gi?b\b", FLAGS),
+            uom="megabyte",
+            scale=1000,
+        ),
+        Rule(
+            pattern=re.compile(r"\b(\d+(\.\d+)?)\s*mhz\b", FLAGS),
+            uom="megahertz",
+            scale=1,
+        ),
+        Rule(
+            pattern=re.compile(r"\b(\d+(\.\d+)?)\s*ghz\b", FLAGS),
+            uom="megahertz",
+            scale=1000,
+        ),
+        Rule(
+            pattern=re.compile(r"\b(\d+(\.\d+)?)\s*(pcs?|pieces?)\b", FLAGS),
             uom="piece",
             scale=1,
         ),
         Rule(
-            pattern=re.compile(r"\b(\d+)\s*(boxs?|boxes)\b", FLAGS), uom="box", scale=1,
+            pattern=re.compile(r"\b(\d+(\.\d+)?)\s*(boxs?|boxes)\b", FLAGS),
+            uom="box",
+            scale=1,
         ),
         Rule(
-            pattern=re.compile(r"\b(\d+)\s*(pkts?|packets?)\b", FLAGS),
+            pattern=re.compile(r"\b(\d+(\.\d+)?)\s*(pkts?|packets?)\b", FLAGS),
             uom="packet",
             scale=1,
         ),
         Rule(
-            pattern=re.compile(r"\b(\d+)\s*bottles?\b", FLAGS), uom="bottle", scale=1,
+            pattern=re.compile(r"\b(\d+(\.\d+)?)\s*bottles?\b", FLAGS),
+            uom="bottle",
+            scale=1,
         ),
     ]
 )
@@ -84,8 +116,9 @@ def get_measurements(s: str, rules: Tuple[Rule, ...] = RULES) -> Set[Measurement
                 mt = Measurement(quantity=int(g), uom="millimetre")
                 res.add(mt)
     for r in rules:
-        m = r.pattern.search(s)
-        if m:
-            mt = Measurement(quantity=int(m.group(1)) * r.scale, uom=r.uom)
-            res.add(mt)
+        matches = r.pattern.findall(s)
+        for m in matches:
+            if m:
+                mt = Measurement(quantity=float(m[0]) * r.scale, uom=r.uom)
+                res.add(mt)
     return res
