@@ -49,6 +49,7 @@ def metric_per_row(prediction: str, target: str = "target") -> Callable[[Any], f
 
 class Item(NamedTuple):
     brands: Set[str]
+    measurements: Set[Measurement]
 
 
 def combine_as_list(
@@ -235,12 +236,20 @@ def efficient_net(variant: str, directory: str, pooling: str):
 
 
 def extract(s: str) -> Item:
-    return Item(brands=get_brands(s))
+    return Item(brands=get_brands(s), measurements=get_measurements(s))
 
 
-def ner_matches(a: Item, b: Item, brand_threshold: float = 0.5) -> bool:
-    if len(a.brands) != 0 and len(b.brands) != 0:
+def ner_matches(
+    a: Item, b: Item, brand_threshold: float = 0.5, measurement_threshold: float = 0.5
+) -> bool:
+    if len(a.brands) != 0:
         jaccard = len(a.brands & b.brands) / len(a.brands | b.brands)
         if jaccard < brand_threshold:
+            return False
+    if len(a.measurements) != 0:
+        jaccard = len(a.measurements & b.measurements) / len(
+            a.measurements | b.measurements
+        )
+        if jaccard < measurement_threshold:
             return False
     return True
