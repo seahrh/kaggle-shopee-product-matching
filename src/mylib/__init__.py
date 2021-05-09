@@ -16,11 +16,13 @@ from .arcface import *
 from .brands import *
 from .stopwords import *
 from .translation import *
+from .measurements import *
 
 __all__ += translation.__all__  # type: ignore  # module name is not defined
 __all__ += stopwords.__all__  # type: ignore  # module name is not defined
 __all__ += arcface.__all__  # type: ignore  # module name is not defined
 __all__ += brands.__all__  # type: ignore  # module name is not defined
+__all__ += measurements.__all__  # type: ignore  # module name is not defined
 
 import re
 import numpy as np
