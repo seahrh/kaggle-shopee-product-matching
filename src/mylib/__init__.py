@@ -53,7 +53,10 @@ class Item(NamedTuple):
 
 
 def combine_as_list(
-    cols: Iterable[str], imap: Dict[str, Item], brand_threshold: float
+    cols: Iterable[str],
+    imap: Dict[str, Item],
+    brand_threshold: float,
+    measurement_threshold: float,
 ) -> Callable:
     def fn(row) -> List[str]:
         s: Set[str] = set()
@@ -62,8 +65,13 @@ def combine_as_list(
             s |= set(row[col])
         bad: Set[str] = set()
         for other in s:
-            if not ner_matches(imap[pid], imap[other], brand_threshold=brand_threshold):
-                print(f"a={repr(imap[pid])}, b={repr(imap[other])}")
+            if not ner_matches(
+                imap[pid],
+                imap[other],
+                brand_threshold=brand_threshold,
+                measurement_threshold=measurement_threshold,
+            ):
+                # print(f"a={repr(imap[pid])}, b={repr(imap[other])}")
                 bad.add(other)
         s -= bad
         s.add(pid)
@@ -73,7 +81,10 @@ def combine_as_list(
 
 
 def combine_as_string(
-    cols: Iterable[str], imap: Dict[str, Item], brand_threshold: float
+    cols: Iterable[str],
+    imap: Dict[str, Item],
+    brand_threshold: float,
+    measurement_threshold: float,
 ) -> Callable:
     def fn(row) -> str:
         s: Set[str] = set()
@@ -82,7 +93,12 @@ def combine_as_string(
             s |= set(row[col])
         bad: Set[str] = set()
         for other in s:
-            if not ner_matches(imap[pid], imap[other], brand_threshold=brand_threshold):
+            if not ner_matches(
+                imap[pid],
+                imap[other],
+                brand_threshold=brand_threshold,
+                measurement_threshold=measurement_threshold,
+            ):
                 bad.add(other)
         s -= bad
         s.add(pid)
