@@ -138,3 +138,15 @@ class TestGetMeasurements:
             Measurement(quantity=256_000, uom="megabyte"),
             Measurement(quantity=1100, uom="megahertz"),
         }
+        assert get_measurements(
+            "Floral foam dry  flower Imitasi gabus pot flower dry 20x10x6, 5cm - foam pot flower"
+        ) == {
+            Measurement(quantity=20, uom="millimetre"),
+            Measurement(quantity=10, uom="millimetre"),
+            Measurement(quantity=6, uom="millimetre"),
+            Measurement(quantity=50, uom="millimetre"),
+        }
+        # TODO fix 6x 11ml
+        assert get_measurements(
+            "3 Pcs - fragrance KISPRAY 6 X11ML box GOLD MAJU BERSAMA"
+        ) == {Measurement(quantity=3, uom="piece")}
