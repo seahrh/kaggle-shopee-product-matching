@@ -105,7 +105,9 @@ def phash_matches(
         rows.append(row)
     x = pd.DataFrame.from_records(rows)
     x = x.astype(np.int8)
-    nn = NearestNeighbors(n_neighbors=min(n_neighbors, len(x) - 1), metric="hamming")
+    nn = NearestNeighbors(
+        n_neighbors=min(n_neighbors, len(x) - 1), metric="hamming", n_jobs=-1
+    )
     nn.fit(x)
     distances, indices = nn.kneighbors()
     res: List[List[str]] = [[] for _ in range(len(indices))]
@@ -134,7 +136,9 @@ def sbert_matches(
         normalize_embeddings=True,
     )
     nn = NearestNeighbors(
-        n_neighbors=min(n_neighbors, len(posting_ids) - 1), metric="euclidean"
+        n_neighbors=min(n_neighbors, len(posting_ids) - 1),
+        metric="euclidean",
+        n_jobs=-1,
     )
     nn.fit(em)
     distances, indices = nn.kneighbors()
