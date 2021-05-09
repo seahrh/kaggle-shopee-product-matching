@@ -43,6 +43,26 @@ class TestGetMeasurements:
         assert get_measurements("10 m") == e
         assert get_measurements("10m") == e
 
+    def test_multiple_lengths(self):
+        assert get_measurements("10x20") == {
+            Measurement(quantity=10, uom="millimetre"),
+            Measurement(quantity=20, uom="millimetre"),
+        }
+        assert get_measurements("10x20x30") == {
+            Measurement(quantity=10, uom="millimetre"),
+            Measurement(quantity=20, uom="millimetre"),
+            Measurement(quantity=30, uom="millimetre"),
+        }
+        assert get_measurements("10 x 20") == {
+            Measurement(quantity=10, uom="millimetre"),
+            Measurement(quantity=20, uom="millimetre"),
+        }
+        assert get_measurements("10 x 20 x 30") == {
+            Measurement(quantity=10, uom="millimetre"),
+            Measurement(quantity=20, uom="millimetre"),
+            Measurement(quantity=30, uom="millimetre"),
+        }
+
     def test_millilitre(self):
         e = {Measurement(quantity=10, uom="millilitre")}
         assert get_measurements("10 millilitre") == e

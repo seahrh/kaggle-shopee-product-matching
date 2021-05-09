@@ -64,9 +64,17 @@ RULES: Tuple[Rule, ...] = tuple(
     ]
 )
 
+MULTIPLE_LENGTHS = re.compile(r"\b(\d+)\s*x\s*(\d+)\s*x?\s*(\d+)?\b", FLAGS)
+
 
 def get_measurements(s: str, rules: Tuple[Rule, ...] = RULES) -> Set[Measurement]:
     res = set()
+    m = MULTIPLE_LENGTHS.search(s)
+    if m:
+        for g in m.groups():
+            if g:
+                mt = Measurement(quantity=int(g), uom="millimetre")
+                res.add(mt)
     for r in rules:
         m = r.pattern.search(s)
         if m:
